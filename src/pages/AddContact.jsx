@@ -53,7 +53,8 @@ const AddContact = () => {
         dispatch({ type: "update_contact", payload: updatedContact });
         navigate("/");
       } catch (err) {
-        console.warn("Error al editar contacto:", err.message);
+        console.error("❌ Error al editar contacto:", err.message);
+        alert("Error al editar contacto. Verifica la conexión con el servidor.");
       }
 
     } else {
@@ -71,13 +72,19 @@ const AddContact = () => {
         dispatch({ type: "add_contact", payload: newContact });
         navigate("/");
       } catch (err) {
-        console.warn("Backend no disponible, guardando local:", err.message);
-        const localContact = { ...form, id: Date.now(), local: true };
-        const local = JSON.parse(localStorage.getItem("offline_contacts") || "[]");
-        local.push(localContact);
-        localStorage.setItem("offline_contacts", JSON.stringify(local));
-        dispatch({ type: "add_contact", payload: localContact });
-        navigate("/");
+        console.error("❌ Error al guardar en API:", err.message);
+
+        // Solo guardar en local si fue un error real de red
+        if (err.message.includes("Failed to fetch") || err.message.includes("NetworkError")) {
+          const localContact = { ...form, id: Date.now(), local: true };
+          const local = JSON.parse(localStorage.getItem("offline_contacts") || "[]");
+          local.push(localContact);
+          localStorage.setItem("offline_contacts", JSON.stringify(local));
+          dispatch({ type: "add_contact", payload: localContact });
+          navigate("/");
+        } else {
+          alert("No se pudo guardar el contacto. Revisa si la API está funcionando.");
+        }
       }
     }
   };

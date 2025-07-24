@@ -1,78 +1,44 @@
 import React, { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import ContactCard from "../components/ContactCard";
 
 const Contacts = () => {
   const { store, dispatch } = useGlobalReducer();
-  const navigate = useNavigate();
 
+  // 🔁 Cargar contactos desde la API al montar el componente
   useEffect(() => {
-    const fetchContacts = async () => {
-      let backendContacts = [];
+    const loadContacts = async () => {
       try {
-        const res = await fetch("https://organic-winner-pxx99pq49rqhr7xw-5000.app.github.dev/contacts");
-        if (res.ok) backendContacts = await res.json();
+        const resp = await fetch("https://organic-winner-pxx99pq49rqhr7xw-5000.app.github.dev/contacts");
+        if (!resp.ok) throw new Error("No se pudo cargar contactos desde API");
+
+        const data = await resp.json();
+        dispatch({ type: "set_contacts", payload: data });
       } catch (err) {
-        console.warn("No se pudieron obtener los contactos del backend:", err);
+        console.warn("❌ API no disponible. Cargando desde localStorage:", err.message);
+        const local = JSON.parse(localStorage.getItem("offline_contacts") || "[]");
+        dispatch({ type: "set_contacts", payload: local });
       }
-
-      // Marcar locales con local: true
-      const localContacts = JSON.parse(localStorage.getItem("offline_contacts") || "[]")
-        .map(c => ({ ...c, local: true }));
-
-      const allContacts = [...backendContacts, ...localContacts];
-      dispatch({ type: "set_contacts", payload: allContacts });
     };
 
-    fetchContacts();
+    loadContacts();
   }, [dispatch]);
-
-  const handleDelete = async (id, isLocal) => {
-    if (isLocal) {
-      // Eliminar localmente
-      let localContacts = JSON.parse(localStorage.getItem("offline_contacts") || "[]");
-      localContacts = localContacts.filter(c => c.id !== id);
-      localStorage.setItem("offline_contacts", JSON.stringify(localContacts));
-      dispatch({ type: "delete_contact", payload: id });
-    } else {
-      try {
-        const res = await fetch(`https://organic-winner-pxx99pq49rqhr7xw-5000.app.github.dev/contacts/${id}`, {
-          method: "DELETE"
-        });
-        if (!res.ok) throw new Error();
-        dispatch({ type: "delete_contact", payload: id });
-      } catch (e) {
-        console.warn("Error al eliminar del backend:", e);
-      }
-    }
-  };
-
-  const handleEdit = (id, isLocal) => {
-    if (isLocal) {
-      navigate(`/edit-local/${id}`);
-    } else {
-      navigate(`/edit/${id}`);
-    }
-  };
 
   return (
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Contactos</h2>
-        <Link to="/add-contact" className="btn btn-primary">Agregar contacto</Link>
+        <h2 className="text-center">Contact List</h2>
+        <Link to="/add-contact" className="btn btn-success">
+          Add New Contact
+        </Link>
       </div>
 
       {store.contacts.length === 0 ? (
-        <p>No hay contactos aún.</p>
+        <p className="text-center">No contacts available.</p>
       ) : (
         store.contacts.map((contact) => (
-          <ContactCard
-            key={contact.id}
-            contact={contact}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-          />
+          <ContactCard key={contact.id} contact={contact} />
         ))
       )}
     </div>
