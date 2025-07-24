@@ -1,4 +1,4 @@
-# Requisitos:
+# Requisitos: 
 # pip install flask flask-cors flask-sqlalchemy
 # python3 app.py
 
@@ -32,9 +32,11 @@ class Contact(db.Model):
             "address": self.address
         }
 
-# Crear las tablas si no existen
+# Crear las tablas y vaciar todos los contactos al iniciar
 with app.app_context():
     db.create_all()
+    db.session.query(Contact).delete()
+    db.session.commit()
 
 # Obtener todos los contactos
 @app.route('/contacts', methods=['GET'])
