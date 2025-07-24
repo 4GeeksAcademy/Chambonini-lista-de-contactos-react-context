@@ -30,13 +30,19 @@
 			"version": "lts"
 		}
 	},
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// This can be used to network with other containers or the host.
-	"forwardPorts": [
-		3000
-	],
+	"forwardPorts": [3000, 5000],
+	"portsAttributes": {
+		"3000": {
+			"label": "React App",
+			"onAutoForward": "openBrowser",
+			"visibility": "public"
+		},
+		"5000": {
+			"label": "Flask API",
+			"onAutoForward": "openBrowser",
+			"visibility": "public"
+		}
+	},
 	"onCreateCommand": "npm ci && (cp .env.example .env || echo \".env creation failed\")",
-	"postCreateCommand": "npm install -g pnpm"
+	"postCreateCommand": "npm install -g pnpm && pip install flask flask-cors"
 }
