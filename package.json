@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
-    "start:backend": "python3 -m flask run --host=0.0.0.0 --port=5000",
+    "start:backend": "sh -c \"python3 -m pip show flask || python3 -m pip install -r requirements.txt && python3 -m flask run --host=0.0.0.0 --port=5000\"",
     "start:frontend": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
