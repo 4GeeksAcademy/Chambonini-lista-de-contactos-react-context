@@ -1,6 +1,6 @@
 {
   "name": "React + Vite",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:0-20",
+  "image": "mcr.microsoft.com/devcontainers/python-node:3.11",
   "customizations": {
     "extensions": [
       "vscode-eslint",
