@@ -41,6 +41,6 @@
       "visibility": "public"
     }
   },
-  "onCreateCommand": "npm ci && (cp .env.example .env || echo \".env creation failed\")",
-  "postCreateCommand": "pip install -r requirements.txt"
+  "onCreateCommand": "npm ci",
+  "postStartCommand": "pip install -r requirements.txt"
 }
