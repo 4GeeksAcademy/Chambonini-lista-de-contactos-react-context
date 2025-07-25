@@ -5,6 +5,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+import os
+os.environ['FLASK_APP'] = 'app.py'
 
 app = Flask(__name__)
 CORS(app)
