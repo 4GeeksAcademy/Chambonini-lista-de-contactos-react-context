@@ -1,48 +1,46 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node
 {
-	"name": "React + Vite",
-	"image": "mcr.microsoft.com/devcontainers/javascript-node:0-20",
-	"customizations": {
-		"extensions": [
-			"vscode-eslint",
-			"vscode-jest"
-		],
-		"settings": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode",
-			"eslint.validate": [
-				"javascript",
-				"typescript"
-			],
-			"workbench.editorAssociations": {
-				"*.md": "vscode.markdown.preview.editor"
-			}
-		}
-	},
-	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-	"features": {
-		"ghcr.io/devcontainers/features/github-cli:1": {
-			"installDirectlyFromGitHubRelease": true,
-			"version": "latest"
-		},
-		"ghcr.io/devcontainers/features/node:1": {
-			"nodeGypDependencies": true,
-			"version": "lts"
-		}
-	},
-	"forwardPorts": [3000, 5000],
-	"portsAttributes": {
-		"3000": {
-			"label": "React App",
-			"onAutoForward": "openBrowser",
-			"visibility": "public"
-		},
-		"5000": {
-			"label": "Flask API",
-			"onAutoForward": "openBrowser",
-			"visibility": "public"
-		}
-	},
-	"onCreateCommand": "npm ci && (cp .env.example .env || echo \".env creation failed\")",
-	"postCreateCommand": "npm install -g pnpm && pip install flask flask-cors"
+  "name": "React + Vite",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:0-20",
+  "customizations": {
+    "extensions": [
+      "vscode-eslint",
+      "vscode-jest"
+    ],
+    "settings": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "eslint.validate": [
+        "javascript",
+        "typescript"
+      ],
+      "workbench.editorAssociations": {
+        "*.md": "vscode.markdown.preview.editor"
+      }
+    }
+  },
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "installDirectlyFromGitHubRelease": true,
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "nodeGypDependencies": true,
+      "version": "lts"
+    }
+  },
+  "forwardPorts": [3000, 5000],
+  "portsAttributes": {
+    "3000": {
+      "label": "React App",
+      "onAutoForward": "openBrowser",
+      "visibility": "public"
+    },
+    "5000": {
+      "label": "Flask API",
+      "onAutoForward": "openBrowser",
+      "visibility": "public"
+    }
+  },
+  "onCreateCommand": "npm ci && (cp .env.example .env || echo \".env creation failed\")",
+  "postCreateCommand": "pip install -r requirements.txt"
 }
